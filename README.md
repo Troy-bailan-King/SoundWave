@@ -4,11 +4,15 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
 
 ## What's next? How do I run this project?
 
-Using Linux cd to the folder and run `npm create t3-app@latest` to download T3 module, maybe you also need to run `npm install`. 
+Using Linux cd to the folder and run `npm create t3-app@latest` to download T3 module, maybe you also need to run `npm install`.  
+
+You may also need to install "clerk" "dayjs" module.
 
 Then you need to creat a '.env' file in root becuase github will Ignore this file, you will not get this file when you clone. 
 
 Then you can copy code from '.env.example' to '.env'. 
+
+
 
 I think you can run this project. I am not sure about mac os.
 
