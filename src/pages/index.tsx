@@ -5,13 +5,30 @@ import { api } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { RouterOutputs } from "~/utils/api";
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage,LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
+import {toast} from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
-  const {mutate} = api.posts.create.useMutation();
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      void ctx.posts.getAll.invalidate();
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        toast.error("Failed to post! Please try again later.");
+      }
+    },
+  });
+
+  const ctx = api.useContext();
+
   const user = useUser();
 
   const [input, setInput] = useState("");
@@ -34,9 +51,11 @@ const CreatePostWizard = () => {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
+      {input !=="" &&!isPosting&&(<button onClick={() => mutate({ content: input })}>Post</button>)}
       
-      <button onClick={() => mutate({ content: input })}>Post</button>
+      {isPosting && (<div className="flex items-center"><LoadingSpinner /></div>)}
     </div>
   );
 };
@@ -75,7 +94,7 @@ const Feed = () => {
 
   return (
     <div className="flex grow flex-col overflow-y-scroll">
-      {[...data].map((fullPost) => (
+      {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
     </div>
