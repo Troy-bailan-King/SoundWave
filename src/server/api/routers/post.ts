@@ -1,18 +1,9 @@
 import { auth, clerkClient } from '@clerk/nextjs';
 import {z} from 'zod';
-import { User } from "@clerk/nextjs/dist/types/server";
 
 import { createTRPCRouter,privateProcedure,publicProcedure } from '~/server/api/trpc';
 import { TRPCError } from "@trpc/server";
-
-const filterUserForClient = (user: User) => {
-  return {
-    id: user.id,
-    username: user.username,
-    profileImageUrl: user.profileImageUrl,
-    externalUsername: user.externalAccounts.find((externalAccount) => externalAccount.provider === "oauth_github")?.username || null
-  };
-};
+import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
 export const postsRouter = createTRPCRouter({
     getAll: publicProcedure.query(async ({ctx})=>{
@@ -53,7 +44,7 @@ export const postsRouter = createTRPCRouter({
     create: privateProcedure
     .input(
       z.object({
-        content: z.string().emoji("Only emojis are allowed").min(1).max(280),
+        content: z.string().min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
