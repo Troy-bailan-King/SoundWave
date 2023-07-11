@@ -48,7 +48,7 @@ const CreatePostWizard = () => {
         }
       }} />
       <input
-        placeholder="Type some emojis!"
+        placeholder="Type some Idea!"
         className="grow bg-transparent outline-none"
         type="text"
         value={input}
@@ -70,19 +70,26 @@ const CreatePostWizard = () => {
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
 const PostView = (props: PostWithUser) => {
-  const {post, author} = props;
-  return(
-    <div key={post.id} className="flex gap-3 border-b border-slate-400 p-4">
-      <img src={author.profileImageUrl} className="h-14 w-14 rounded-full"/>
-            <div className="flex flex-col">
-              <div className="flex gap-1 text-slate-300">
-                <Link href={`/@${author.username}`}><span>{`@${author.username} `}</span></Link>
-                <Link href={`/post/${post.id}`}><span className="font-thin">{`·${dayjs(post.createdAt).fromNow()}`}</span></Link>
-              </div>
-              <span className="text-2xl">{post.content}</span>
-            </div>
-            
-          </div>
+  const { post, author } = props;
+  return (
+    <div
+      key={post.id}
+      className="flex gap-3 border-b border-4 border-yellow-800 p-4 bg-orange-200 text-black"
+      style={{ wordWrap: 'break-word' }}
+    >
+      <img src={author.profileImageUrl} className="h-14 w-14 rounded-full" />
+      <div className="flex flex-col">
+        <div className="flex gap-1 text-black-300">
+          <Link href={`/@${author.username}`}>
+            <span>{`@${author.username} `}</span>
+          </Link>
+          <Link href={`/post/${post.id}`}>
+            <span className="font-thin">{`·${dayjs(post.createdAt).fromNow()}`}</span>
+          </Link>
+        </div>
+        <span className="text-2xl">{post.content}</span>
+      </div>
+    </div>
   );
 };
 
@@ -100,7 +107,7 @@ const Feed = () => {
   if (!data) return <div>Something went wrong</div>;
 
   return (
-    <div className="flex grow flex-col overflow-y-scroll">
+    <div className="flex flex-col overflow-y-scroll">
       {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
@@ -118,14 +125,16 @@ const Home: NextPage = () => {
   if(!userLoaded) return <div />
 
   return (
-    <PageLayout>
-      <div className="flex border-b border-slate-400 p-4">
+    <div className="relative">
+      <PageLayout>
+      <div className="flex border-b border-yellow-800 p-4">
         {!isSignedIn && (
           <div className="flex justify-center">
             <SignInButton />
           </div>
         )}
         {isSignedIn && <CreatePostWizard />}
+        {/* New Functionality Interface */}
       </div>
 
       <Feed />
@@ -144,9 +153,13 @@ const Home: NextPage = () => {
             <div>Github</div>
           </div>
         </a>
-        
       </div>
     </PageLayout>
+    <div className="absolute top-0 right-0 m-4">
+    {/* New Functionality Interface */}
+     123
+  </div>
+    </div>
   );
 };
 
