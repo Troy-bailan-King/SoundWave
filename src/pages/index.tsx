@@ -160,7 +160,6 @@ const Home: NextPage = () => {
     </PageLayout>
     <div className="absolute top-0 right-0 m-4">
     {/* New Functionality Interface */}
-    <button id="authButton">授权</button>
   </div>
     </div>
   );
