@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { SignInButton, useUser,UserButton } from "@clerk/nextjs";
-import { type NextPage } from "next";
+import { NextApiRequest, NextApiResponse, type NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import dayjs from "dayjs";
@@ -11,8 +14,45 @@ import {toast} from "react-hot-toast";
 import Link from "next/link";
 import { PageLayout } from "~/components/layout";
 import Login from "../components/login";
-dayjs.extend(relativeTime);
+import { useSession, signIn, signOut } from "next-auth/react"
+import tinycolor from "tinycolor2";
+import { getToken } from "next-auth/jwt";
+import { getAudioFeatures } from "~/libs/spotify";
 
+dayjs.extend(relativeTime);
+const client_id = process.env.SPOTIFY_CLIENT_ID
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET
+const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64')
+const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`
+
+const getAccessToken = async (refresh_token: string) => {
+  const response = await fetch(TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${basic}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token
+    })
+  })
+
+  return response.json()
+}
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const token = await getToken({req});
+  const {query} = req;
+  if (query.ids && token){
+    const ids = query.ids;
+    const accessToken = token.accessToken as string;
+    const response = await getAudioFeatures(accessToken, ids as string);
+    const {audio_features} = await response.json();
+    return res.status(200).json(audio_features);
+  }
+  return res.status(400).json({error: "No ids provided"});
+};
 
 
 const CreatePostWizard = () => {
@@ -119,6 +159,8 @@ const Feed = () => {
 
 
 const Home: NextPage = () => {
+  const { data: session } = useSession()
+  console.log(session);
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
   // Start fetching asap
@@ -160,7 +202,25 @@ const Home: NextPage = () => {
           </div>
         </PageLayout>
         </div >
-        <Login />
+        {!session && (
+                <Login />
+              )}
+
+        {session && (
+                <><div>123</div>
+                
+                
+                <div className="flex w-full md:w-1/2 flex-col  justify-center rounded-2xl p-10">
+            <button
+              style={{ backgroundColor: tinycolor("#1ed760").desaturate(40).toHexString() }}
+              className="flex h-20 w-3/4 flex-row items-center justify-center rounded-2xl border-white p-4 text-white"
+              onClick={() => signOut()}
+            >
+              Hey, {session?.user?.name}
+              <h2 className="w-full text-lg md:text-xl lg:text-2xl"> Sign out</h2>
+            </button>
+          </div></>
+              )}
       </div>
     </div>
   );

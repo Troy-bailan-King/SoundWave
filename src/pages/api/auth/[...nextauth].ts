@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/require-await */
 import NextAuth, { User, type NextAuthOptions } from "next-auth";
 import SpotifyProvider, { SpotifyProfile } from "next-auth/providers/spotify";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
 
 export const authOptions: NextAuthOptions = {
+  
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
@@ -14,13 +19,14 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({token, account}) {
-      if (account) {
-        token.accessToken = account.refresh_token;
-      }
-      return token;
+      return{...token, ...account};
     },
+    async session({session, token}) {
+      session.user = token as any;
+      return session;
+    }
   },
-  secret: process.env.NEXT_AUTH_SECRET as string,
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);
