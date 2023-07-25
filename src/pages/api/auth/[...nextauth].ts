@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import NextAuth, { User, type NextAuthOptions } from "next-auth";
 import SpotifyProvider, { SpotifyProfile } from "next-auth/providers/spotify";
 
