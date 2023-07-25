@@ -1,4 +1,4 @@
-import { type AppType } from "next/app";
+import { AppProps } from "next/app";
 import { ClerkProvider } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
@@ -6,13 +6,13 @@ import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ClerkProvider {...pageProps}>
       <Head>
         <title>SoundExchange</title>
         <meta name="description" content="💭" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
       </Head>
       <Toaster position="bottom-center" />
       <SessionProvider session={pageProps.session}>
