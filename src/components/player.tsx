@@ -1,12 +1,10 @@
-import ReactAudioPlayer from 'react-audio-player';
-export default function Player({src}:{src: string}){
-  return (<></>)  
+import React from "react";
+
+export default function Player() {
   return (
-        <ReactAudioPlayer
-        className='w-1/2 h-10 hidden md:block'
-        src={src}
-        controls
-        // other props here
-      />
-    )
+      <div>
+        Audio Player
+      </div>
+  );
 }
+

@@ -62,7 +62,7 @@ export default function SongInSearch({
           {song.artists[0].name}
         </p>
       </div>
-      <Player src={song.preview_url} />
+      
       <PlusIcon
         className="h-10 w-10 md:ml-10 cursor-pointer flex justify-center items-center"
         onClick={() =>

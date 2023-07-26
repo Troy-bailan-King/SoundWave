@@ -18,6 +18,11 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import tinycolor from "tinycolor2";
 import { getToken } from "next-auth/jwt";
 import { getAudioFeatures } from "~/libs/spotify";
+import player from "../components/player";
+import Player from "../components/player";
+import SpotifySearch from "~/components/spotifysearch";
+import TabButton from "~/components/tabbutton";
+import textColor from "~/libs/textColor";
 
 dayjs.extend(relativeTime);
 const client_id = process.env.SPOTIFY_CLIENT_ID
@@ -138,6 +143,7 @@ const PostView = (props: PostWithUser) => {
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
+  
 
   if (postsLoading)
     return (
@@ -159,7 +165,12 @@ const Feed = () => {
 
 
 const Home: NextPage = () => {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
+  const [startSong, setStartSong] = useState({ id: "", name: "", img: "" });
+  const [endSong, setEndSong] = useState({ id: "", name: "", img: "" });
+  const [openTab, setOpenTab] = useState<number>(0);
+  const [startColor, setStartColor] = useState(tinycolor("#333333"));
+  const [endColor, setEndColor] = useState(tinycolor("#222222"));
   console.log(session);
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
@@ -206,21 +217,63 @@ const Home: NextPage = () => {
                 <Login />
               )}
 
-        {session && (
-                <><div>123</div>
-                
-                
-                <div className="flex w-full md:w-1/2 flex-col  justify-center rounded-2xl p-10">
-            <button
-              style={{ backgroundColor: tinycolor("#1ed760").desaturate(40).toHexString() }}
-              className="flex h-20 w-3/4 flex-row items-center justify-center rounded-2xl border-white p-4 text-white"
-              onClick={() => signOut()}
-            >
-              Hey, {session?.user?.name}
-              <h2 className="w-full text-lg md:text-xl lg:text-2xl"> Sign out</h2>
-            </button>
-          </div></>
-              )}
+        {session && (        
+                <div className="relative flex font-main min-h-screen w-full flex-col items-center justify-start overflow-x-hidden  bg-yellow-200 text-stone-900">
+                <div className="flex h-full w-5/6 flex-col items-center justify-center py-5 lg:w-3/4">
+                  <div className="m-5 flex flex-row items-center justify-center ">
+                    <Link href="/">
+                      <span>
+                        <img src="/logo.png" className="w-10 mx-3" />
+                      </span>
+                    </Link>
+                    <h1 className="text-4xl font-semibold">
+                      <b>
+                        <i>SoundWave</i>
+                      </b>
+                    </h1>
+                  </div>
+                  <div className=""></div>
+                  <div className=""></div>
+                  <div className="flex w-full flex-row items-center justify-center font-semibold">
+                    <TabButton
+                      tabNumber={0}
+                      color={startColor}
+                      setOpenTab={setOpenTab}
+                      display={openTab === 0}
+                      song={startSong}
+                    >
+                      <h1
+                        style={{ color: textColor(startColor, [tinycolor("white")]) }}
+                        className="m-2 font-semibold md:text-xl"
+                      >
+                        Search songs
+                      </h1>
+                    </TabButton>
+                  </div>
+                  <SpotifySearch
+                    display={openTab == 0}
+                    color={startColor}
+                    setSong={setStartSong}
+                    title={"First Song"}
+                  />
+                  <div
+                    className={
+                      "m-10 flex w-3/4 flex-col rounded-2xl p-4 text-center text-xl text-white md:w-1/3"
+                    }
+                    style={{
+                      backgroundColor: tinycolor("#1ed760")
+                        .desaturate(40)
+                        .toHexString(),
+                    }}
+                  >
+                    Hey, {session?.user?.name}
+                    <button className="hover:text-blue-200" onClick={() => signOut()}>
+                      Sign out
+                    </button>
+                  </div>
+                </div>
+              </div>
+              )}        
       </div>
     </div>
   );
