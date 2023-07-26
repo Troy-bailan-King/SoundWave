@@ -4,9 +4,10 @@ import Head from "next/head";
 import { PageLayout } from "~/components/layout";
 import { api } from "~/utils/api";
 
-
+// ProfilePage component - a NextPage component representing the profile page
 const ProfilePage: NextPage = () => {
   const{data,isLoading} = api.profile.getUserByUsername.useQuery({username: "lin1"});
+  //Return Condition
   if (isLoading) return <div>Loading...</div>;
 
   if(!data) return <div>Not found</div>;

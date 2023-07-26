@@ -9,6 +9,7 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+    // Return the application structure
   return (
     <ClerkProvider {...pageProps}>
       <Head>
@@ -23,7 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     </ClerkProvider>
   );
 }
-
+// Export the MyApp component with trpc (typed RPC) integration using the "api" from "~/utils/api"
 export default api.withTRPC(MyApp);
 
 

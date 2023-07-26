@@ -16,6 +16,7 @@ dayjs.extend(relativeTime);
 
 
 const CreatePostWizard = () => {
+    // Fetch the create post function and loading status from the API using useMutation hook
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("");
@@ -71,6 +72,7 @@ const CreatePostWizard = () => {
 
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
+// Create a component for displaying a single post with its author information
 const PostView = (props: PostWithUser) => {
   const { post, author } = props;
   return (
