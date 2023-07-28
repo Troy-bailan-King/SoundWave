@@ -147,13 +147,13 @@ export default function Results() {
       <div className="relative flex min-h-screen w-full flex-col items-center justify-start bg-green-50 py-10 pb-20  font-main text-stone-900">
         <div className="m-5 flex flex-row items-center justify-center ">
           <Link href="/">
-            <a>
-              <img src="/logo.svg" className="mx-3 w-10" />
-            </a>
+            <span>
+              <img src="/logo.png" className="mx-3 w-10" />
+            </span>
           </Link>
           <h1 className="text-4xl font-semibold">
             <b>
-              Your <i>Vibesition</i>
+              Your <i>SoundWave</i>
             </b>
           </h1>
         </div>
@@ -191,6 +191,17 @@ export default function Results() {
               onClick={handleCreatePlaylist}
             >
               Save Playlist
+            </button>
+            <button
+              style={{
+                backgroundColor: tinycolor("#1ed760")
+                  .desaturate(40)
+                  .toHexString(),
+              }}
+              className="mx-3 h-1/2 w-1/2 rounded-xl p-2 text-white"
+              onClick={handleCreatePlaylist}
+            >
+              Go back
             </button>
           </div>
           {playlistUrl && (

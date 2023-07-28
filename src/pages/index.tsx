@@ -249,6 +249,46 @@ const Home: NextPage = () => {
                         Search songs
                       </h1>
                     </TabButton>
+                    <TabButton
+              tabNumber={1}
+              color={endColor}
+              setOpenTab={setOpenTab}
+              display={openTab === 1}
+              song={endSong}
+            >
+              <h1
+                style={{ color: textColor(endColor, [tinycolor("white")]) }}
+                className="m-2  md:text-xl"
+              >
+                End Song
+              </h1>
+            </TabButton>
+
+            <Link
+                  href={{
+                    pathname: (startSong.id && endSong.id) ? "/results" : "/",
+                    query: { startId: startSong.id, endId: endSong.id },
+                  }}
+                >
+            <button
+              style={{
+                backgroundColor:
+                  startSong.id && endSong.id
+                    ? tinycolor("#1ed760").desaturate(20).toHexString()
+                    : tinycolor("#1ed760").desaturate(40).toHexString(),
+              }}
+              className={`flex h-20 w-1/3 flex-row items-center justify-center rounded-t-2xl p-2 font-bold md:text-xl text-white border-green-100 border-l-2 border-t-2`}
+              onClick={() => setOpenTab(0)}
+            >
+              {startSong.id && endSong.id && (
+
+                  <a>
+                    Generate your <i>Vibesition</i>
+                  </a>
+                
+              )}
+            </button>
+            </Link>
                   </div>
                   <SpotifySearch
                     display={openTab == 0}
@@ -256,6 +296,12 @@ const Home: NextPage = () => {
                     setSong={setStartSong}
                     title={"First Song"}
                   />
+                  <SpotifySearch
+            display={openTab == 1}
+            color={endColor}
+            setSong={setEndSong}
+            title={"Second Song"}
+          />
                   <div
                     className={
                       "m-10 flex w-3/4 flex-col rounded-2xl p-4 text-center text-xl text-white md:w-1/3"
