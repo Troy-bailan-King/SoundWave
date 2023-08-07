@@ -12,15 +12,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import tinycolor from "tinycolor2";
-import { motion } from "framer-motion";
-import textColor from "../libs/textColor";
 import featuresToColors from "../libs/featuresToColor";
 import Login from "../components/login";
 import { useSession } from "next-auth/react";
-import Player from "../components/player";
 import SongCard from "../components/songcard";
 import Link from "next/link";
-import { handleClientScriptLoad } from "next/script";
+
+const handleGoBack = () => {
+  window.location.href = '/'; // 跳转到根路径
+};
 
 function interpolate(features1: any, features2: any, t: number) {
   const features: any = {};
@@ -199,7 +199,7 @@ export default function Results() {
                   .toHexString(),
               }}
               className="mx-3 h-1/2 w-1/2 rounded-xl p-2 text-white"
-              onClick={handleCreatePlaylist}
+              onClick={handleGoBack}
             >
               Go back
             </button>
