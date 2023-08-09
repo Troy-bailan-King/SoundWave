@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
+
+
+// Importing necessary libraries and components
 import { SignInButton, useUser,UserButton } from "@clerk/nextjs";
 import { NextApiRequest, NextApiResponse, type NextPage } from "next";
-import Head from "next/head";
 import { api } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -14,22 +16,24 @@ import {toast} from "react-hot-toast";
 import Link from "next/link";
 import { PageLayout } from "~/components/layout";
 import Login from "../components/login";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import tinycolor from "tinycolor2";
 import { getToken } from "next-auth/jwt";
 import { getAudioFeatures } from "~/libs/spotify";
-import player from "../components/player";
-import Player from "../components/player";
 import SpotifySearch from "~/components/spotifysearch";
 import TabButton from "~/components/tabbutton";
 import textColor from "~/libs/textColor";
 
+// Extending dayjs with relativeTime plugin
 dayjs.extend(relativeTime);
+
+// Spotify client details
 const client_id = process.env.SPOTIFY_CLIENT_ID
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64')
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`
 
+// Function to get access token from Spotify
 const getAccessToken = async (refresh_token: string) => {
   const response = await fetch(TOKEN_ENDPOINT, {
     method: 'POST',
@@ -46,6 +50,8 @@ const getAccessToken = async (refresh_token: string) => {
   return response.json()
 }
 
+
+// API handler for fetching audio features
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = await getToken({req});
   const {query} = req;
@@ -59,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   return res.status(400).json({error: "No ids provided"});
 };
 
-
+// Component for creating a post
 const CreatePostWizard = () => {
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
@@ -116,6 +122,7 @@ const CreatePostWizard = () => {
 
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
+// Component to display a post with its author
 const PostView = (props: PostWithUser) => {
   const { post, author } = props;
   return (
@@ -141,6 +148,7 @@ const PostView = (props: PostWithUser) => {
 };
 
 
+// Component to display the feed
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
   
@@ -164,6 +172,7 @@ const Feed = () => {
 };
 
 
+// Component to display the home page
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const [startSong, setStartSong] = useState({ id: "", name: "", img: "" });

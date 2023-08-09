@@ -9,6 +9,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+
+// Importing necessary libraries and components
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import tinycolor from "tinycolor2";
@@ -18,10 +20,12 @@ import { useSession } from "next-auth/react";
 import SongCard from "../components/songcard";
 import Link from "next/link";
 
+// Function to handle going back to homepage
 const handleGoBack = () => {
-  window.location.href = '/'; // 跳转到根路径
+  window.location.href = '/'; 
 };
 
+// Function to interpolate between two songs
 function interpolate(features1: any, features2: any, t: number) {
   const features: any = {};
   const s = 1 / (1 + Math.exp(-(5 * (t - 0.5))));
@@ -34,6 +38,7 @@ function interpolate(features1: any, features2: any, t: number) {
   return features;
 }
 
+// Function to render the results page
 export default function Results() {
   const router = useRouter();
   const { startId, endId } = router.query;
@@ -48,7 +53,8 @@ export default function Results() {
   const [playlistName, setPlaylistName] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState("");
   const ids = useRef(new Set([startId, endId]));
-
+  
+  // Fetching the songs and their features
   useEffect(() => {
     async function fetchSongs() {
       setInterpolatedSongs([]);
@@ -112,6 +118,7 @@ export default function Results() {
     fetchSongs();
   }, [endId, startId, numSongs]);
 
+  // Fetching the colors of the songs
   useEffect(() => {
     if (interpolatedSongs.length === numSongs) {
       fetch(
@@ -128,6 +135,7 @@ export default function Results() {
     }
   }, [interpolatedSongs, startId, endId]);
 
+  // Function to handle creating a playlist
   function handleCreatePlaylist() {
     fetch(
       `/api/create-playlist?name=${playlistName}&ids=` +
@@ -142,6 +150,7 @@ export default function Results() {
       });
   }
 
+  // Rendering the results page
   if (session) {
     return (
       <div className="relative flex min-h-screen w-full flex-col items-center justify-start bg-green-50 py-10 pb-20  font-main text-stone-900">
