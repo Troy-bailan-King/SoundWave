@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 
+// Function to render the app
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ClerkProvider {...pageProps}>

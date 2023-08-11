@@ -6,6 +6,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
 
+//  This is a helper function that filters out sensitive user data
 export const profileRouter = createTRPCRouter({
   getUserByUsername: publicProcedure
     .input(z.object({ username: z.string() }))

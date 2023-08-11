@@ -1,5 +1,6 @@
 import { User } from "@clerk/nextjs/dist/types/server";
 
+//  This is a helper function that filters out sensitive user data
 export const filterUserForClient = (user: User) => {
   return {
     id: user.id,

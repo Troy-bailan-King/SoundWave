@@ -1,13 +1,16 @@
+// PlusIcon component to render a plus icon using SVG
 export default function PlusIcon(props: any) {
   return (
+    // SVG element representing the plus icon
     <svg
-      {...props}
+      {...props} // Spread the props to the SVG element
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
       strokeWidth={2}
     >
+      {/* Path of the plus icon */}
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

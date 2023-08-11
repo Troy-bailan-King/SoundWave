@@ -7,6 +7,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { Session } from "inspector";
 import { JWT } from "next-auth/jwt";
 
+
+
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -18,16 +20,20 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({token, account}) {
+   // Function to handle JWT (JSON Web Token) generation and modification
+   async jwt({token, account}) {
+    // If an authenticated account exists, set the JWT access token to the refresh token from the account
       if (account) {
         token.accessToken = account.refresh_token;
       }
       return token;
     },
+    // Function to handle session object creation and modification
     async session({session, token}) {
       return session;
     },
   },
+  // Secret key used for token encryption and decryption
   secret: process.env.NEXT_AUTH_SECRET as string,
 };
 

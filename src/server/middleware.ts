@@ -1,7 +1,7 @@
 import { authMiddleware, withClerkMiddleware } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-
+// export default authMiddleware;
 export default withClerkMiddleware(()=>{
     return NextResponse.next();
 });

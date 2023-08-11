@@ -4,7 +4,7 @@ import Head from "next/head";
 import { PageLayout } from "~/components/layout";
 import { api } from "~/utils/api";
 
-
+// Function to render the profile page
 const ProfilePage: NextPage = () => {
   const{data,isLoading} = api.profile.getUserByUsername.useQuery({username: "lin1"});
   if (isLoading) return <div>Loading...</div>;

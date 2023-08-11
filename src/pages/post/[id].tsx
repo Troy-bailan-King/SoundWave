@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
 
-
+// Function to render the post page
 const SinglePostPage: NextPage = () => {
   const {isLoaded:userLoaded, isSignedIn} = useUser();
   

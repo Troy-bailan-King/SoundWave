@@ -1,3 +1,4 @@
+// Disable certain TypeScript rules for specific lines of code
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -13,8 +14,7 @@ import tinycolor from "tinycolor2";
 import {DebounceInput} from 'react-debounce-input';
 import textColor from "~/libs/textColor";
 
-
-
+// Component for Spotify song search
 export default function SpotifySearch({
   title,
   display,
@@ -34,22 +34,25 @@ export default function SpotifySearch({
     img: string;
   }) => void;
 }) {
+  // State for search query and search results
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
 
+  // Function to fetch search results
   const search = (query: string) => {
     fetch(`/api/search?q=${query}`)
-        .then((res) => res.json())
-        .then((data) => setSearchResults(data));
+      .then((res) => res.json())
+      .then((data) => setSearchResults(data));
   };
   
+  // Function to handle input change with debounce
   async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchQuery(e.target.value)
     search(e.target.value);
   }
 
-
   return (
+    // Container for the Spotify search component
     <motion.div
       animate={{
         display: display ? "block" : "none",
@@ -61,6 +64,7 @@ export default function SpotifySearch({
       }}
       className="flex h-full w-full flex-col flex-wrap items-center justify-center overflow-x-hidden rounded-b-2xl p-5"
     >
+      {/* DebounceInput for the search input */}
       <DebounceInput
         style={{
           backgroundColor: color.clone().lighten(40).toHexString(),
@@ -73,6 +77,7 @@ export default function SpotifySearch({
         onChange={handleChange}
       />
       <div className="flex w-full flex-col items-center justify-start">
+        {/* Render search results */}
         {searchResults &&
           searchResults.map((result: any, idx: number) => (
             <SongInSearch

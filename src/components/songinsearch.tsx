@@ -1,3 +1,4 @@
+// Disable certain TypeScript rules for specific lines of code
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @next/next/no-img-element */
@@ -7,6 +8,8 @@ import tinycolor from "tinycolor2";
 import Player from './player';
 import SongImage from "./songimage";
 import textColor from "~/libs/textColor";
+
+// Component for displaying a song in search results
 export default function SongInSearch({
   song,
   setSong,
@@ -25,6 +28,7 @@ export default function SongInSearch({
   color: tinycolor.Instance;
 }) {
   return (
+    // Container for displaying the song in search results
     <motion.div
       initial={{
         x: -20,
@@ -50,10 +54,12 @@ export default function SongInSearch({
       className="m-1 flex w-full flex-row items-center justify-start rounded-2xl px-4 hover:cursor-pointer md:p-2 md:px-8"
       key={song.id}
     >
+      {/* Display song image */}
       <div className="rounded-xl aspect-square h-24">
-      <SongImage songName={song.name} imgUrl={song.album.images[1].url} spotifyUrl={song.external_urls.spotify} />
+        <SongImage songName={song.name} imgUrl={song.album.images[1].url} spotifyUrl={song.external_urls.spotify} />
       </div>
       
+      {/* Display song information */}
       <div className="m-2 flex w-full flex-col items-start justify-center overflow-x-hidden">
         <h1 className="truncate whitespace-nowrap font-semibold md:text-xl">
           {song.name}
@@ -63,6 +69,7 @@ export default function SongInSearch({
         </p>
       </div>
       
+      {/* Display PlusIcon for adding the song */}
       <PlusIcon
         className="h-10 w-10 md:ml-10 cursor-pointer flex justify-center items-center"
         onClick={() =>
